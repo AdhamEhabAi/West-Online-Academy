@@ -2,7 +2,6 @@ import 'package:elmanasa/widgets/homeScreenWidgets/clipper.dart';
 import 'package:flutter/material.dart';
 import 'package:elmanasa/constants.dart';
 
-
 class QuizPage extends StatelessWidget {
   const QuizPage({super.key});
 
@@ -72,7 +71,7 @@ class QuizPage extends StatelessWidget {
                 ),
               ],
             ),
-             const Padding(
+            const Padding(
               padding: EdgeInsets.all(8.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -80,7 +79,7 @@ class QuizPage extends StatelessWidget {
                   Icon(
                     Icons.not_interested_outlined,
                     color: kPrimaryColor,
-                     size: 200,
+                    size: 200,
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),

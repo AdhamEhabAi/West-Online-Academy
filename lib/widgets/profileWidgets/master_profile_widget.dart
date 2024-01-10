@@ -67,4 +67,3 @@ class MasterProfileWidget extends StatelessWidget {
     );
   }
 }
-

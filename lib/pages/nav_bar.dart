@@ -10,7 +10,6 @@ import 'home_screen.dart';
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
 
-
   @override
   State<NavBar> createState() => _NavBarState();
 }
@@ -24,6 +23,7 @@ class _NavBarState extends State<NavBar> {
     pageController = PageController(initialPage: currentIndex);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
@@ -35,18 +35,21 @@ class _NavBarState extends State<NavBar> {
           const HomeScreen(),
           const QuizPage(),
           MyCourses(user: user),
-          const ProfilePage(),],
+          const ProfilePage(),
+        ],
       ),
       bottomNavigationBar: Container(
         color: kSecondaryColor,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: GNav(
             onTabChange: (index) {
               setState(() {
                 currentIndex = index;
               });
-              pageController.animateToPage(currentIndex, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+              pageController.animateToPage(currentIndex,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeIn);
             },
             color: Colors.white,
             activeColor: Colors.white,
@@ -54,27 +57,27 @@ class _NavBarState extends State<NavBar> {
             tabBackgroundColor: kPrimaryColor,
             padding: const EdgeInsets.all(16),
             gap: 8,
-              tabs: const [
-                GButton(
-                  icon: Icons.home,
-                  text: 'الرئيسية',
-                ),
-                GButton(
-                  icon: Icons.quiz,
-                  text: 'الاختبارات',
-                ),
-                GButton(
-                  icon: Icons.play_arrow_outlined,
-                  text: 'دوراتي',
-                ),
-                GButton(
-                  icon: Icons.account_circle_outlined,
-                  text: 'الملف الشخصي',
-                ),
-              ],),
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: 'الرئيسية',
+              ),
+              GButton(
+                icon: Icons.quiz,
+                text: 'الاختبارات',
+              ),
+              GButton(
+                icon: Icons.play_arrow_outlined,
+                text: 'دوراتي',
+              ),
+              GButton(
+                icon: Icons.account_circle_outlined,
+                text: 'الملف الشخصي',
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 }

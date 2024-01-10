@@ -60,7 +60,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     onVideoChanged: updateSelectedVideoUrl,
                   ),
                   const SizedBox(height: 25),
-
                   Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
@@ -120,17 +119,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                         _selectedTag == 0
                             ? PlayList(
-                          ownedCourse: ownedCourse,
-                          onVideoSelected: updateSelectedVideoUrl,
-                        )
+                                ownedCourse: ownedCourse,
+                                onVideoSelected: updateSelectedVideoUrl,
+                              )
                             : Description(
-                          ownedCourse: ownedCourse,
-                        ),
+                                ownedCourse: ownedCourse,
+                              ),
                         const SizedBox(height: 30),
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -156,7 +154,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 }
 
-
 class PlayList extends StatelessWidget {
   const PlayList({
     Key? key,
@@ -175,9 +172,9 @@ class PlayList extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return const SizedBox();
         } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-          return const SizedBox();  // Instead of Text('No videos available.');
+          return const SizedBox(); // Instead of Text('No videos available.');
         } else {
           List<Video> videos = snapshot.data!;
           return ListView.separated(
@@ -187,7 +184,7 @@ class PlayList extends StatelessWidget {
               );
             },
             padding: const EdgeInsets.only(top: 20, bottom: 40),
-            shrinkWrap: true,  // Use shrinkWrap: true if inside a Column
+            shrinkWrap: true, // Use shrinkWrap: true if inside a Column
             itemCount: videos.length,
             itemBuilder: (context, index) {
               return VideoCard(
@@ -214,9 +211,9 @@ class Description extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return const SizedBox();
         } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-          return const SizedBox();  // Instead of Text('');
+          return const SizedBox(); // Instead of Text('');
         } else {
           List<AllPdf> pdfs = snapshot.data!;
           return ListView.separated(
@@ -226,7 +223,7 @@ class Description extends StatelessWidget {
               );
             },
             padding: const EdgeInsets.only(top: 20, bottom: 40),
-            shrinkWrap: true,  // Use shrinkWrap: true if inside a Column
+            shrinkWrap: true, // Use shrinkWrap: true if inside a Column
             itemCount: pdfs.length,
             itemBuilder: (context, index) {
               return PdfCard(pdf: pdfs[index]);
@@ -237,7 +234,6 @@ class Description extends StatelessWidget {
     );
   }
 }
-
 
 class CustomTabView extends StatefulWidget {
   final Function(int) changeTab;
@@ -297,5 +293,3 @@ class _CustomTabViewState extends State<CustomTabView> {
     );
   }
 }
-
-

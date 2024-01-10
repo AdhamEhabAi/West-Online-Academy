@@ -18,8 +18,8 @@ class CourseContainer extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) => DetailsScreen(
-                ownedCourse: ownedCourse,
-              ))),
+                    ownedCourse: ownedCourse,
+                  ))),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -36,7 +36,10 @@ class CourseContainer extends StatelessWidget {
                 height: 60,
                 errorBuilder: (context, error, stackTrace) {
                   // Display a placeholder image when an error occurs
-                  return Image.asset('assets/images/logo.jpeg',height: 40,);
+                  return Image.asset(
+                    'assets/images/logo.jpeg',
+                    height: 40,
+                  );
                 },
               ),
             ),
@@ -47,7 +50,10 @@ class CourseContainer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(ownedCourse.name,style: const TextStyle(fontSize: 20),),
+                  Text(
+                    ownedCourse.name,
+                    style: const TextStyle(fontSize: 20),
+                  ),
                   const SizedBox(
                     height: 5,
                   ),

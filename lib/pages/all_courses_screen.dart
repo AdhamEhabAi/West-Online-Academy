@@ -1,6 +1,5 @@
 import 'package:elmanasa/constants.dart';
 import 'package:elmanasa/models/all_course_by_year.dart';
-import 'package:elmanasa/models/all_teachers.dart';
 import 'package:elmanasa/models/user_model.dart';
 import 'package:elmanasa/services/get_all_courses_year.dart';
 import 'package:elmanasa/services/get_all_teachers.dart';
@@ -22,7 +21,8 @@ class _AllCoursesPageState extends State<AllCoursesPage> {
       appBar: AppBar(
         title: const Text(
           'كل الدورات',
-          style: TextStyle(color: Colors.white,
+          style: TextStyle(
+            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -91,9 +91,6 @@ class _AllCoursesPageState extends State<AllCoursesPage> {
                         itemBuilder: (context, index) => Courses(
                           enableNavigation: true,
                           image: "assets/images/logo.jpeg",
-                          cost: '83,00',
-                          count: "1333",
-                          teacher: teachers[index] as AllTeachers,
                           course: courses[index] as CourseYear,
                           user: user,
                         ),

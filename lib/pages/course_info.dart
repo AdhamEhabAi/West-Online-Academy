@@ -10,7 +10,6 @@ import 'package:elmanasa/widgets/courseScreenWidgets/lessonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-
 class CourseInfo extends StatelessWidget {
   CourseInfo({super.key});
   late AllLessons selectedLesson;
@@ -33,6 +32,13 @@ class CourseInfo extends StatelessWidget {
           backgroundColor: kSecondaryColor,
           centerTitle: true,
           elevation: 0.0,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+            color: Colors.white,
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -120,7 +126,9 @@ class CourseInfo extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   FutureBuilder<List<AllLessons>>(
                     future: AllLessonsService().getAllLessons(catId: course.id),
                     builder: (context, snapshot) {
@@ -151,32 +159,34 @@ class CourseInfo extends StatelessWidget {
                                   selectedLesson = lessons[index];
                                   try {
                                     http.Response response = await http.post(
-                                        Uri.parse(
-                                            checkIfTheCourseIsOwned),
+                                        Uri.parse(checkIfTheCourseIsOwned),
                                         body: {
                                           'idcourse': selectedLesson.id,
                                           'iduser': user.id,
                                         });
                                     if (response.statusCode == 200) {
                                       Map<String, dynamic> data =
-                                      jsonDecode(response.body);
+                                          jsonDecode(response.body);
                                       print(data.toString());
-                                      if(data['status'] == 'false')
-                                      {
+                                      if (data['status'] == 'false') {
                                         showGeneralDialog(
                                           barrierDismissible: true,
                                           barrierLabel: "Code page",
                                           context: context,
-                                          pageBuilder: (context, _, __) => CodePage(user: user, lesson: selectedLesson,),
+                                          pageBuilder: (context, _, __) =>
+                                              CodePage(
+                                            user: user,
+                                            lesson: selectedLesson,
+                                          ),
                                         );
-                                      }else {
-                                        return showSnackbar(context, 'انت تمتلك هذا الكورس بالفعل');
+                                      } else {
+                                        return showSnackbar(context,
+                                            'انت تمتلك هذا الكورس بالفعل');
                                       }
                                     }
                                   } on Exception catch (e) {
                                     showSnackbar(context, e.toString());
                                   }
-
                                 },
                                 child: LessonWidget(lessons: lessons[index]),
                               );
@@ -191,8 +201,6 @@ class CourseInfo extends StatelessWidget {
             ),
           ),
         ),
-
-
       ),
     );
   }

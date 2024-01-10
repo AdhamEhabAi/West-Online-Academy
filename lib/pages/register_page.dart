@@ -180,7 +180,8 @@ class _RegisterPageState extends State<RegisterPage> {
                             FutureBuilder<List<Year>>(
                               future: AllYearsService().getAllYears(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
                                   return const CircularProgressIndicator();
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
@@ -194,28 +195,34 @@ class _RegisterPageState extends State<RegisterPage> {
                                     value: dropDownValue,
                                     items: snapshot.hasData
                                         ? [
-                                      const DropdownMenuItem<String>(
-                                        value: 'اختر الصف',
-                                        child: Text('اختر الصف'),
-                                      ),
-                                      ...snapshot.data!.map((year) {
-                                        return DropdownMenuItem<String>(
-                                          value: year.className,
-                                          child: Text(year.className),
-                                        );
-                                      }).toList()
-                                    ]
+                                            const DropdownMenuItem<String>(
+                                              value: 'اختر الصف',
+                                              child: Text('اختر الصف'),
+                                            ),
+                                            ...snapshot.data!.map((year) {
+                                              return DropdownMenuItem<String>(
+                                                value: year.className,
+                                                child: Text(year.className),
+                                              );
+                                            }).toList()
+                                          ]
                                         : [],
                                     onChanged: (String? selectedValue) {
                                       setState(() {
                                         dropDownValue = selectedValue!;
-                                        classId = years.firstWhere(
-                                              (year) => year.className == selectedValue,
-                                        ).id;
+                                        classId = years
+                                            .firstWhere(
+                                              (year) =>
+                                                  year.className ==
+                                                  selectedValue,
+                                            )
+                                            .id;
                                       });
                                     },
-                                    icon: const Icon(Icons.menu, color: kSecondaryColor),
-                                    style: const TextStyle(color: kSecondaryColor, fontSize: 16),
+                                    icon: const Icon(Icons.menu,
+                                        color: kSecondaryColor),
+                                    style: const TextStyle(
+                                        color: kSecondaryColor, fontSize: 16),
                                   );
                                 }
                               },
@@ -315,6 +322,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
+
 String? validateDropDown(String? value) {
   if (value == null || value == 'اختر الصف') {
     return 'يرجى اختيار الصف'; // Replace this message with your desired error message

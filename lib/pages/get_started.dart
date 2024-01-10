@@ -38,15 +38,20 @@ class GetStarted extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  Image.asset('assets/images/logo.jpeg',width: 360,height: 360,fit:BoxFit.cover,),
+                  Image.asset(
+                    'assets/images/logo.jpeg',
+                    width: 360,
+                    height: 360,
+                    fit: BoxFit.cover,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-
                       const SizedBox(
                         width: 20,
                       ),
-                      CustomButton(width: 180,
+                      CustomButton(
+                        width: 180,
                         text: 'ابدأ الأن',
                         onTap: () {
                           showGeneralDialog(
@@ -71,5 +76,3 @@ class GetStarted extends StatelessWidget {
     );
   }
 }
-
-

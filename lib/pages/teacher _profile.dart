@@ -15,17 +15,22 @@ class TeacherProfile extends StatefulWidget {
 class _TeacherProfileState extends State<TeacherProfile> {
   @override
   Widget build(BuildContext context) {
-    AllTeachers allTeachers = ModalRoute.of(context)!.settings.arguments as AllTeachers;
+    AllTeachers allTeachers =
+        ModalRoute.of(context)!.settings.arguments as AllTeachers;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('الملف الشخصي للمعلم',style: TextStyle(color: Colors.white),),
+        title: const Text(
+          'الملف الشخصي للمعلم',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: kSecondaryColor,
         centerTitle: true,
         elevation: 0.0,
-        leading: IconButton(onPressed: ()
-        {
-          Navigator.pop(context);
-        }, icon: const Icon(Icons.arrow_back_ios)),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -102,7 +107,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('رياضيات',
+                      Text('الماده',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
@@ -128,7 +133,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(allTeachers.country == '1' ? 'مصر': 'السعودية',
+                      Text(allTeachers.country == '1' ? 'مصر' : 'السعودية',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 15,
@@ -166,21 +171,21 @@ class _TeacherProfileState extends State<TeacherProfile> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                        Icon(
-                          Icons.child_care_outlined,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                        Icon(
-                          Icons.play_circle,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                        Icon(
-                          Icons.stars,
-                          color: Colors.white,
-                          size: 40,
-                        ),
+                      Icon(
+                        Icons.child_care_outlined,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      Icon(
+                        Icons.play_circle,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                      Icon(
+                        Icons.stars,
+                        color: Colors.white,
+                        size: 40,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -236,7 +241,8 @@ class _TeacherProfileState extends State<TeacherProfile> {
               height: 20,
             ),
             FutureBuilder<List<AllLessons>>(
-              future: Allcoursesbyteacher().getAllcoursesPyteacher(teacherId: allTeachers.id),
+              future: Allcoursesbyteacher()
+                  .getAllcoursesPyteacher(teacherId: allTeachers.id),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -259,7 +265,9 @@ class _TeacherProfileState extends State<TeacherProfile> {
                       shrinkWrap: true,
                       itemCount: lessons.length,
                       itemBuilder: (context, index) {
-                        return CourseByTeacher(lessons: lessons[index],);
+                        return CourseByTeacher(
+                          lessons: lessons[index],
+                        );
                       },
                     ),
                   );

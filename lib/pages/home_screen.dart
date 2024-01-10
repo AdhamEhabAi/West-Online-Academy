@@ -1,15 +1,22 @@
+import 'dart:convert';
 import 'package:elmanasa/constants.dart';
 import 'package:elmanasa/models/all_course_by_year.dart';
+import 'package:elmanasa/models/all_lessons.dart';
 import 'package:elmanasa/models/all_teachers.dart';
 import 'package:elmanasa/models/user_model.dart';
+import 'package:elmanasa/pages/code_screen.dart';
 import 'package:elmanasa/services/get_all_courses_year.dart';
 import 'package:elmanasa/services/get_all_teachers.dart';
+import 'package:elmanasa/services/search_service.dart';
+import 'package:elmanasa/widgets/buttonsAndTextFields/show_snake_bar.dart';
 import 'package:elmanasa/widgets/homeScreenWidgets/teacher.dart';
 import 'package:elmanasa/widgets/homeScreenWidgets/clipper.dart';
 import 'package:elmanasa/widgets/homeScreenWidgets/course_widget.dart';
 import 'package:elmanasa/widgets/shimmer/course_shimmer.dart';
 import 'package:elmanasa/widgets/shimmer/teacher_shimmer.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../widgets/courseScreenWidgets/lessonWidget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +27,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int levelIndex = 0;
+  late AllLessons selectedLesson;
+  final TextEditingController _searchController = TextEditingController();
+  bool _isSearching = false;
   @override
   Widget build(BuildContext context) {
     UserModel user = ModalRoute.of(context)!.settings.arguments as UserModel;
@@ -47,9 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'مرحبا, ${user.fname + ' ' + user.lname}',
+                            'مرحبا, ${'${user.fname} ${user.lname}'}',
                             style: const TextStyle(
-                              overflow: TextOverflow.ellipsis,
+                                overflow: TextOverflow.ellipsis,
                                 fontSize: 30,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -69,20 +79,122 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: TextFormField(
-                              style: const TextStyle(
-                                color: Colors.black,
-                              ),
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'بحث',
-                                prefixIcon:
-                                    Icon(Icons.search, color: kPrimaryColor),
-                                suffixIcon: Icon(
-                                  Icons.manage_search,
-                                  color: kPrimaryColor,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _searchController.text = value;
+                                      _isSearching = value
+                                          .isNotEmpty; // Set the flag based on whether the user is actively searching.
+                                    });
+                                  },
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'بحث',
+                                    prefixIcon: Icon(Icons.search,
+                                        color: kPrimaryColor),
+                                    suffixIcon: Icon(
+                                      Icons.manage_search,
+                                      color: kPrimaryColor,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                if (_isSearching)
+                                  FutureBuilder<List<AllLessons>>(
+                                    future: SearchService()
+                                        .getAllLessonsBySearch(
+                                            lessonName: _searchController.text,
+                                            yr: user.yr),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Container(); // You can show a loading indicator here if needed.
+                                      } else if (snapshot.hasError) {
+                                        return const Text(
+                                            'لا يوجد دروس بهذا الاسم');
+                                      } else if (!snapshot.hasData ||
+                                          snapshot.data!.isEmpty) {
+                                        return const Text(
+                                            'لا يوجد نتائج للبحث');
+                                      } else {
+                                        List<AllLessons> searchLessons =
+                                            snapshot.data!;
+                                        return Container(
+                                          color: Colors.white,
+                                          child: ListView.separated(
+                                            scrollDirection: Axis.vertical,
+                                            separatorBuilder: (_, __) {
+                                              return const SizedBox(
+                                                height: 10,
+                                              );
+                                            },
+                                            padding: const EdgeInsets.only(
+                                                top: 20, bottom: 40),
+                                            shrinkWrap: true,
+                                            itemCount: searchLessons.length,
+                                            itemBuilder: (context, index) {
+                                              return GestureDetector(
+                                                onTap: () async {
+                                                  selectedLesson =
+                                                      searchLessons[index];
+                                                  try {
+                                                    http.Response response =
+                                                        await http.post(
+                                                      Uri.parse(
+                                                          checkIfTheCourseIsOwned),
+                                                      body: {
+                                                        'idcourse':
+                                                            selectedLesson.id,
+                                                        'iduser': user.id,
+                                                      },
+                                                    );
+                                                    if (response.statusCode ==
+                                                        200) {
+                                                      Map<String, dynamic>
+                                                          data = jsonDecode(
+                                                              response.body);
+                                                      print(data.toString());
+                                                      if (data['status'] ==
+                                                          'false') {
+                                                        showGeneralDialog(
+                                                          barrierDismissible:
+                                                              true,
+                                                          barrierLabel:
+                                                              "Code page",
+                                                          context: context,
+                                                          pageBuilder: (context,
+                                                                  _, __) =>
+                                                              CodePage(
+                                                            user: user,
+                                                            lesson:
+                                                                selectedLesson,
+                                                          ),
+                                                        );
+                                                      } else {
+                                                        showSnackbar(context,
+                                                            'انت تمتلك هذا الكورس بالفعل');
+                                                      }
+                                                    }
+                                                  } on Exception catch (e) {
+                                                    showSnackbar(
+                                                        context, e.toString());
+                                                  }
+                                                },
+                                                child: LessonWidget(
+                                                    lessons:
+                                                        searchLessons[index]),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                              ],
                             ),
                           ),
                           const SizedBox(
@@ -123,90 +235,82 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-          FutureBuilder(
-            future: Future.wait([
-              AllCoursesByYearService().getAllCoursesYear(yr: user.yr),
-              AllTeachersService().getAllTeachers()
-            ]),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CourseShimmer();
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.not_interested_outlined,
-                          color: kPrimaryColor,
-                          size: 200,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'لا يوجد مواد , في الوقت الحالي .',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.grey,
+            FutureBuilder(
+              future: AllCoursesByYearService().getAllCoursesYear(yr: user.yr),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CourseShimmer();
+                } else if (snapshot.hasError) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.not_interested_outlined,
+                            color: kPrimaryColor,
+                            size: 200,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'لا يوجد مواد , في الوقت الحالي .',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.not_interested_outlined,
-                          color: kPrimaryColor,
-                          size: 200,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'لا يوجد اختبارات لمواد اشتركت فيها , في الوقت الحالي .',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.grey,
+                  );
+                } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.not_interested_outlined,
+                            color: kPrimaryColor,
+                            size: 200,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'لا يوجد اختبارات لمواد اشتركت فيها , في الوقت الحالي .',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ); // or handle the case where data is null
-              } else {
-                List<Object> courses = snapshot.data![0];
-                List<Object> teachers = snapshot.data![1];
-                return SizedBox(
-                  height: 280,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => Courses(
-                      enableNavigation: true,
-                      image: "assets/images/logo.jpeg",
-                      cost: '250,00',
-                      count: "100",
-                      teacher: teachers[index] as AllTeachers,
-                      course: courses[index] as CourseYear,
-                      user: user,
+                  ); // or handle the case where data is null
+                } else {
+                  List<CourseYear> courses = snapshot.data!;
+                  return SizedBox(
+                    height: 280,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => Courses(
+                        enableNavigation: true,
+                        image: "assets/images/logo.jpeg",
+                        course: courses[index],
+                        user: user,
+                      ),
+                      itemCount: courses.length,
                     ),
-                    itemCount: courses.length,
-                  ),
-                );
-              }
-            },
-          ),
-
-          Padding(
+                  );
+                }
+              },
+            ),
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -239,10 +343,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const TeacherShimmer();
                 } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.account_circle,
+                            color: kPrimaryColor,
+                            size: 100,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'لا يوجد مدرسين , في الوقت الحالي .',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 } else if (snapshot.data == null) {
-                  return const Text(
-                      'لا يوجد مدرسين الان');
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.account_circle,
+                            color: kPrimaryColor,
+                            size: 100,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'لا يوجد مدرسين , في الوقت الحالي .',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 } else {
                   List<AllTeachers> teachers = snapshot.data!;
                   return SizedBox(

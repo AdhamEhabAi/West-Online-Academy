@@ -1,4 +1,4 @@
-package com.example.elmanasa
+package com.WestOnlineAcademy.elmanasa
 
 import io.flutter.embedding.android.FlutterActivity
 

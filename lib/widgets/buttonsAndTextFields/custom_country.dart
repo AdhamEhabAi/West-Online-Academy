@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomCountrySquare extends StatelessWidget {
-  CustomCountrySquare({super.key,required this.text,required this.color,this.onTap});
+  CustomCountrySquare(
+      {super.key, required this.text, required this.color, this.onTap});
   final String? text;
   final Color? color;
   VoidCallback? onTap;
@@ -23,19 +24,19 @@ class CustomCountrySquare extends StatelessWidget {
           children: [
             // SizedBox(width: 10,),
             const Icon(
-            Icons.location_on_outlined,
-            color: Colors.white,
-        ),
+              Icons.location_on_outlined,
+              color: Colors.white,
+            ),
             Text(
               text!,
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-              ),),
+              ),
+            ),
           ],
         ),
-
       ),
     );
   }

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.elmanasa">
+    package="com.WestOnlineAcademy.elmanasa">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
@@ -34,7 +34,7 @@
             android:value="2" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.elmanasa.flutter_downloader.provider"
+            android:authorities="com.WestOnlineAcademy.elmanasa.flutter_downloader.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

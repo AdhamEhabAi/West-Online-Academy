@@ -1,3 +1,4 @@
+import 'package:elmanasa/constants.dart';
 import 'package:elmanasa/models/all_teachers.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,6 @@ class TeacherBox extends StatelessWidget {
               width: 150,
               height: 140,
               decoration: BoxDecoration(
-                image: const DecorationImage(image: AssetImage('assets/images/man.jpg'),fit: BoxFit.cover,),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: const [
                   BoxShadow(
@@ -27,6 +27,17 @@ class TeacherBox extends StatelessWidget {
                     blurRadius: 10,
                   ),
                 ],
+              ),
+              child: Image.network(
+                imgPath + teachers.img,
+                height: 60,
+                errorBuilder: (context, error, stackTrace) {
+                  // Display a placeholder image when an error occurs
+                  return Image.asset(
+                    'assets/images/user.png',
+                    height: 40,
+                  );
+                },
               ),
             ),
             Container(
@@ -60,8 +71,8 @@ class TeacherBox extends StatelessWidget {
                     ),
                   ),
                   Center(
-                    child: Text(teachers!.fname + teachers!.lname,
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 22),
+                    child: Text(teachers.fname + teachers.lname,
+                      style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 22),
                     ),
                   ),
                   const Center(

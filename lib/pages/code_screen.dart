@@ -50,8 +50,7 @@ class CodePage extends StatelessWidget {
                     height: 20,
                   ),
                   TextField(
-                    onChanged: (value)
-                    {
+                    onChanged: (value) {
                       code = value;
                     },
                     keyboardType: TextInputType.number,
@@ -73,35 +72,27 @@ class CodePage extends StatelessWidget {
                     height: 60,
                     width: double.infinity,
                     onTap: () async {
-                        try {
-                          http.Response response = await http.post(
-                              Uri.parse(
-                                  getCourseByCode),
-                              body: {
-                                'code': code,
-                                'id': user.id,
-                              });
-                          if (response.statusCode == 200) {
-                            Map<String, dynamic> data =
-                            jsonDecode(response.body);
-                            if(data['status'] == 'false')
-                            {
-
-                              return showSnackbar(context,
-                                  data['error'].toString());
-                            }else {
-                              showSnackbar(context, 'تم بنجاح');
-                              Navigator.of(context).pop();
-                            }
+                      try {
+                        http.Response response =
+                            await http.post(Uri.parse(getCourseByCode), body: {
+                          'code': code,
+                          'id': user.id,
+                        });
+                        if (response.statusCode == 200) {
+                          Map<String, dynamic> data = jsonDecode(response.body);
+                          if (data['status'] == 'false') {
+                            return showSnackbar(
+                                context, data['error'].toString());
                           } else {
-                            throw Exception(
-                                'هناك مشكلة ${response.statusCode}');
+                            showSnackbar(context, 'تم بنجاح');
+                            Navigator.of(context).pop();
                           }
-                        } on Exception catch (e) {
-                          showSnackbar(context, e.toString());
+                        } else {
+                          throw Exception('هناك مشكلة ${response.statusCode}');
                         }
-
-
+                      } on Exception catch (e) {
+                        showSnackbar(context, e.toString());
+                      }
                     },
                     child: const Text(
                       'تأكيد',

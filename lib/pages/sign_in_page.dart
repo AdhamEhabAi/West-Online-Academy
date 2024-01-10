@@ -9,7 +9,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../constants.dart';
 import 'package:http/http.dart' as http;
 
-
 class SignInPage extends StatefulWidget {
   const SignInPage({
     super.key,
@@ -21,7 +20,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> formKey = GlobalKey();
-  late String userName , passWord;
+  late String userName, passWord;
   bool isLoading = false;
   late final UserModel user;
 
@@ -78,8 +77,7 @@ class _SignInPageState extends State<SignInPage> {
                                 }
                               },
                               textInputType: TextInputType.emailAddress,
-                              onChanged: (value)
-                              {
+                              onChanged: (value) {
                                 userName = value;
                               },
                               labelText: 'البريد الالكتروني',
@@ -91,17 +89,15 @@ class _SignInPageState extends State<SignInPage> {
                               height: 20,
                             ),
                             CustomTextField.customFormTextField(
-                              validator: (value)
-                              {
-                                if(value!.isEmpty)
-                                {
+                              validator: (value) {
+                                if (value!.isEmpty) {
                                   return 'رجاءً ادخل كلمة المرور';
-                                }return null;
+                                }
+                                return null;
                               },
                               obsecureText: true,
                               textInputType: TextInputType.visiblePassword,
-                              onChanged: (value)
-                              {
+                              onChanged: (value) {
                                 passWord = value;
                               },
                               labelText: 'كلمة المرور',
@@ -114,47 +110,45 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                             CustomButton(
                                 onTap: () async {
-                                  if(formKey.currentState!.validate())
-                                  {
+                                  if (formKey.currentState!.validate()) {
                                     setState(() {
                                       isLoading = true;
                                     });
                                     try {
-                                      http.Response response = await http.post(
-                                          Uri.parse(
-                                              signInApi),
-                                          body: {
-                                            'username': userName,
-                                            'password': passWord,
-                                          });
+                                      http.Response response = await http
+                                          .post(Uri.parse(signInApi), body: {
+                                        'username': userName,
+                                        'password': passWord,
+                                      });
                                       if (response.statusCode == 200) {
                                         Map<String, dynamic> data =
-                                        jsonDecode(response.body);
-                                          if(data['status'] == 'false')
-                                          {
-                                            setState(() {
-                                              isLoading = false;
-                                            });
-                                            return showSnackbar(context, 'اسم المستخدم او كلمه السر خطء');
-                                          }else {
-                                            user = UserModel(
-                                                id: data['id'],
-                                                fname: data['fname'],
-                                                lname: data['lname'],
-                                                img: data['img'],
-                                                fnum: data['fnum'],
-                                                country: data['country'],
-                                                uname: data['uname'],
-                                                upass: data['upass'],
-                                                yr: data['yr']);
-                                            showSnackbar(context, 'تم تسجيل الدخول بنجاح');
-                                            Navigator.pushReplacementNamed(
-                                                context, 'NavBar',arguments: user);
-                                            setState(() {
-                                              isLoading = false;
-                                            });
-
-                                          }
+                                            jsonDecode(response.body);
+                                        if (data['status'] == 'false') {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                          return showSnackbar(context,
+                                              'اسم المستخدم او كلمه السر خطء');
+                                        } else {
+                                          user = UserModel(
+                                              id: data['id'],
+                                              fname: data['fname'],
+                                              lname: data['lname'],
+                                              img: data['img'],
+                                              fnum: data['fnum'],
+                                              country: data['country'],
+                                              uname: data['uname'],
+                                              upass: data['upass'],
+                                              yr: data['yr']);
+                                          showSnackbar(
+                                              context, 'تم تسجيل الدخول بنجاح');
+                                          Navigator.pushReplacementNamed(
+                                              context, 'NavBar',
+                                              arguments: user);
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        }
                                       } else {
                                         throw Exception(
                                             'هناك مشكلة ${response.statusCode}');
@@ -162,7 +156,6 @@ class _SignInPageState extends State<SignInPage> {
                                     } on Exception catch (e) {
                                       showSnackbar(context, e.toString());
                                     }
-
                                   }
                                 },
                                 text: 'تسجيل الدخول',

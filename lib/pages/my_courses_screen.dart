@@ -30,20 +30,27 @@ class MyCourses extends StatelessWidget {
               ),
             ),
             centerTitle: true,
-            leading: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back_ios_outlined,color: kSecondaryColor,)),
+            leading: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: kSecondaryColor,
+                )),
           ),
           body: SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
               child: FutureBuilder<List<AllOwnCourses>>(
                 future: GetOwnedCoursesService().getAllOwnedCourses(body: {
-                  'iduser':user!.id,
+                  'iduser': user!.id,
                 }),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.data == null || (snapshot.data!).isEmpty) {
+                  } else if (snapshot.data == null ||
+                      (snapshot.data!).isEmpty) {
                     return const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -86,7 +93,6 @@ class MyCourses extends StatelessWidget {
                     );
                   }
                 },
-
               ),
             ),
           ),

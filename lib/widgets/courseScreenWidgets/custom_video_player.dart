@@ -82,7 +82,9 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
             ),
             builder: (context, player) {
               return Scaffold(
-                appBar: AppBar(title: const Text('الفيديو'),),
+                appBar: AppBar(
+                  title: const Text('الفيديو'),
+                ),
                 body: player,
               );
             },
@@ -95,7 +97,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   @override
   void didUpdateWidget(covariant CustomVideoPlayer oldWidget) {
     if (oldWidget.initialApiUrl != widget.initialApiUrl) {
-      final newVideoUrl = 'https://www.youtube.com/watch?v=${widget.initialApiUrl}';
+      final newVideoUrl =
+          'https://www.youtube.com/watch?v=${widget.initialApiUrl}';
       final newVideoID = YoutubePlayer.convertUrlToId(newVideoUrl);
 
       if (_controller.initialVideoId != newVideoID) {

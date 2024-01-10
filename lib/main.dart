@@ -22,8 +22,7 @@ import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(
-      debug: true,
-
+    debug: true,
   );
   runApp(const MyApp());
   WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
@@ -55,9 +54,8 @@ class MyApp extends StatelessWidget {
         'GetStarted': (context) => const GetStarted(),
         'SplashScreen': (context) => const SplashScreen(),
         'NavBar': (context) => const NavBar(),
-        'PrivAndPolicy' :(context) => const PrivAndPolicy(),
-        'MyCourses': (context) =>
-            MyCourses(
+        'PrivAndPolicy': (context) => const PrivAndPolicy(),
+        'MyCourses': (context) => MyCourses(
               user: UserModel.fromJson(json),
             ),
         'CourseInfo': (context) => CourseInfo(),
@@ -66,10 +64,8 @@ class MyApp extends StatelessWidget {
         'AllTeachersScreen': (context) => const AllTeachersScreen(),
         'RegisterPage': (context) => const RegisterPage(),
         'EditProfilePage': (context) => const EditProfilePage(),
-        'DetailsScreen': (context) =>
-            DetailsScreen(
-              ownedCourse: AllOwnCourses.fromJson(
-                  json as Map<String, dynamic>),
+        'DetailsScreen': (context) => DetailsScreen(
+              ownedCourse: AllOwnCourses.fromJson(json as Map<String, dynamic>),
             ),
       },
     );

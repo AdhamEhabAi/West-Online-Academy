@@ -40,7 +40,7 @@ class Teacher extends StatelessWidget {
                   // Display a placeholder image when an error occurs
                   return const CircleAvatar(
                     radius: 25,
-                    backgroundImage: AssetImage('assets/images/man.jpg'),
+                    backgroundImage: AssetImage('assets/images/user.png'),
                   );
                 },
               ),
@@ -51,7 +51,7 @@ class Teacher extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    allTeachers.fname! +' '+allTeachers.lname!,
+                    '${allTeachers.fname!} ${allTeachers.lname!}',
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,

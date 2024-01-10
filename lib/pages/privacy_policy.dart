@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class PrivAndPolicy extends StatelessWidget {
   const PrivAndPolicy({super.key});
 
@@ -8,7 +9,8 @@ class PrivAndPolicy extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text(''' 
+            Text(
+              ''' 
                 Privacy Policy
                 Last updated: September 20, 2022
 
@@ -158,9 +160,9 @@ class PrivAndPolicy extends StatelessWidget {
 ''',
               style: TextStyle(
                 color: Colors.black,
-
-              ),textDirection: TextDirection.ltr,
-                ),
+              ),
+              textDirection: TextDirection.ltr,
+            ),
           ],
         ),
       ),
