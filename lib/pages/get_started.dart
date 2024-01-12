@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'sign_in_page.dart';
 
 class GetStarted extends StatelessWidget {
-  const GetStarted({super.key});
+  const GetStarted({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,6 @@ class GetStarted extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  // const Spacer(flex: 1),
                   const Text(
                     'على منصتنا، نقدم لكم أدوات وموارد تعليمية مبتكرة تمكنكم من استكشاف عوالم جديدة وتطوير قدراتكم بشكل شامل.',
                     textAlign: TextAlign.right,

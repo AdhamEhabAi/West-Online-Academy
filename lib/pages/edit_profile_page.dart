@@ -45,7 +45,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: Form(
           key: formKey,
           child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
             clipBehavior: Clip.none,
             child: Column(
               children: [

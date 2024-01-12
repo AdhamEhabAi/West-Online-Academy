@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             CustomTextField.customFormTextField(
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return 'رجاءً ادخل الاسم الاول ';
+                                  return 'رجاءً ادخل الاسم الاول';
                                 }
                                 return null;
                               },
@@ -190,40 +190,38 @@ class _RegisterPageState extends State<RegisterPage> {
                                 } else {
                                   List<Year> years = snapshot.data!;
                                   return DropdownButtonFormField<String>(
-                                    validator: validateDropDown,
+                                    validator: (value) => validateDropDown(value),
                                     isExpanded: true,
                                     value: dropDownValue,
                                     items: snapshot.hasData
                                         ? [
-                                            const DropdownMenuItem<String>(
-                                              value: 'اختر الصف',
-                                              child: Text('اختر الصف'),
-                                            ),
-                                            ...snapshot.data!.map((year) {
-                                              return DropdownMenuItem<String>(
-                                                value: year.className,
-                                                child: Text(year.className),
-                                              );
-                                            }).toList()
-                                          ]
+                                      const DropdownMenuItem<String>(
+                                        value: 'اختر الصف',
+                                        child: Text('اختر الصف'),
+                                      ),
+                                      ...snapshot.data!.map((year) {
+                                        return DropdownMenuItem<String>(
+                                          value: year.className,
+                                          child: Text(year.className),
+                                        );
+                                      }).toList()
+                                    ]
                                         : [],
                                     onChanged: (String? selectedValue) {
                                       setState(() {
                                         dropDownValue = selectedValue!;
                                         classId = years
                                             .firstWhere(
-                                              (year) =>
-                                                  year.className ==
-                                                  selectedValue,
-                                            )
+                                              (year) => year.className == selectedValue,
+                                        )
                                             .id;
                                       });
                                     },
-                                    icon: const Icon(Icons.menu,
-                                        color: kSecondaryColor),
-                                    style: const TextStyle(
-                                        color: kSecondaryColor, fontSize: 16),
+                                    icon: const Icon(Icons.menu, color: kSecondaryColor),
+                                    style: const TextStyle(color: kSecondaryColor, fontSize: 16),
                                   );
+
+
                                 }
                               },
                             ),
